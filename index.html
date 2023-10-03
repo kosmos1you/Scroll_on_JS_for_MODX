@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    h2 {
+  margin-bottom: 100vh;
+}
+</style>
+<body>
+    <nav class="scrollto">
+        <a class="menu_development" href="#menu_0">ЧТО ВХОДИТ В ПОС</a>
+        <a class="menu_development" href="#menu_1">ЭТАПЫ РАБОТ</a>
+        <a class="menu_development" href="#menu_2">ПРИМЕРЫ</a>
+        <a class="menu_development" href="#menu_3">ОТЗЫВЫ</a>
+        <a class="menu_development" href="#menu_4">КЛИЕНТЫ</a>
+        <a class="menu_development" href="#menu_5">СТОИМОСТЬ</a>
+  </nav>
+<script>
+    // циклом собираем все ссылки, в которых есть scroll
+document.querySelectorAll('.scroll').forEach(link => {
+    // вешаем клик на каждую ссылку
+    link.addEventListener('click', function(e) {
+        // обнуляем стандартное поведение
+        e.preventDefault();
+        let anchor = this.getAttribute('href').split('#')[1]; // получаем кусок после #  // якорь
+        let local = this.getAttribute('href').split('#')[0]; // получаем кусок перед # // адрес страницы якоря
+        scroll(anchor);
+        if (document.getElementById(`${anchor}`)) {
+            // если мы на странице где находятся якорь
+            // обнуляем глобальное значение якоря
+            localStorage.setItem('globalAnchor', '0');
+            // скролим
+            scroll(anchor);
+        } else {
+            // если мы не на странице якоря
+            // присваиваем глобальному якорю значение из нажатой ссылки, чтобы прехватить после перехода))
+            localStorage.setItem('globalAnchor', anchor);
+            // перенаправляем страницу
+            window.location.href = local;
+        }
+    });
+});
+// при загрузке страницы проверяем была простая перезагрузка или переход к якорю
+let anchor = localStorage.getItem("globalAnchor");
+if (anchor != 0 && anchor) {
+    // если в globalAnchor не 0, а нормальное значение якоря, то запускаем функцию
+    scroll(anchor);
+    // обнуляем глобальное значение якоря, чтобы при простой перезагрузке страницы не скролилось к якорю
+    localStorage.setItem('globalAnchor', '0');
+}
+function scroll(anchor) {
+    const scrollTarget = document.getElementById(anchor); // получаем блок к которому нужен скрол
+    const elementPosition = scrollTarget.getBoundingClientRect().top; // получаем расстояние до блока
+    window.scrollBy({
+        top: elementPosition,
+        behavior: 'smooth'
+    });
+}
+</script>
+</body>
+</html>
